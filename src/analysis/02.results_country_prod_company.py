@@ -117,7 +117,7 @@ results_order_by_df = results_df.orderBy(results_df.title.asc())
 
 # COMMAND ----------
 
-from delta.tables import deltaTable
+from delta.tables import DeltaTable
 
 if spark.catalog.tableExists("movie_gold.results_country_prod_company"):
 
