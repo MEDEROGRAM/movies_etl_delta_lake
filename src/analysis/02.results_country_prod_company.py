@@ -126,7 +126,7 @@ if spark.catalog.tableExists("movie_gold.results_country_prod_company"):
     deltaTable.alias('tgt') \
     .merge(
         results_order_by_df.alias('src'),
-        'tgt.movie_id = src.movie_id'
+        'tgt.movie_id = src.movie_id AND tgt.created_date = src.created_date'
     ) \
     .whenMatchedUpdateAll() \
     .whenNotMatchedInsertAll() \
