@@ -110,21 +110,17 @@ movies_final_df = add_insgestion_date(movies_renamed_df) \
 
 # COMMAND ----------
 
-# Agregar columnas con el metodo .withColumns y la funcion current_timestamp y lit
-# movies_final_df = movies_renamed_df.withColumns({"ingestion_date": current_timestamp(), "env": lit ("production")})
-
-# COMMAND ----------
-
 # MAGIC %md
-# MAGIC ##### Paso 5 - Escribir datos en el datalake en formato "Parquet"
+# MAGIC ##### Paso 5 - Escribir datos en el datalake en formato "Delta"
 
 # COMMAND ----------
 
-overwrite_partition("movie_silver", "movies", "file_date", v_file_date)
+#overwrite_partition("movie_silver", "movies", "file_date", v_file_date)
 
 # COMMAND ----------
 
-movies_final_df.write.mode("append").partitionBy("file_date").format("delta").saveAsTable("movie_silver.movies")
+merge_condition = 'tgt.movie_id = src.movie_id AND tgt.file_date = src.file_date'
+merge_delta_lake(movies_final_df, "movie_silver", "movies", merge_condition, "file_date")
 
 # COMMAND ----------
 
